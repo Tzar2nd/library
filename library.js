@@ -45,29 +45,58 @@ function addBookToDOM(book, key) {
 
     // Read button
     button = document.createElement('button');
-    button.textContent = 'Read';
-    button.classList.add('read-button');
+    if (book.read == 'Yes') {
+        button.textContent = 'Read';
+        button.classList.add('status-button');
+        button.classList.add('read-button');
+    } else {
+        button.textContent = 'Not Read';
+        button.classList.add('status-button');
+        button.classList.add('not-read-button');
+    }
+    button.addEventListener('click', () => changeBookStatus(key));
     div.appendChild(button);
 
     // Delete button
     button = document.createElement('button');
-    button.textContent = 'X';
+    button.innerHTML = `&times;`;
     button.setAttribute("data-key", key);
     button.classList.add('trash-button');
-    button.addEventListener('click', 
-    () => removeBook(key));
+    button.addEventListener('click', () => removeBook(key));
     div.appendChild(button);
+}
+
+function changeBookStatus(key) {
+    book = library[key-1];
+    const div = document.querySelector(`div[data-key="${key}"]`);
+    button = div.getElementsByClassName('status-button')[0];
+
+    if (book.read == 'Yes') { 
+        book.read = 'No';
+        button.textContent = 'Not Read';
+        button.classList.remove('read-button');
+        button.classList.add('not-read-button');
+    } else {
+        book.read = 'Yes';
+        button.textContent = 'Read'
+        button.classList.remove('not-read-button');
+        button.classList.add('read-button');
+    }
+
+    updateStats();
 }
 
 // remove book from DOM via data-key
 function removeBook(key) {
+    library[key-1] = null;
+    console.log(library);
     const div = document.querySelector(`div[data-key="${key}"]`);
-    alert(key);
     div.textContent = '';
     div.parentNode.removeChild(div);
+    updateStats();
 }
 
-// Model code for popup form
+// Modal code for popup form
 var modal = document.getElementById("myModal");
 var btn = document.getElementById("newBook");
 var span = document.getElementsByClassName("close")[0];
@@ -84,9 +113,36 @@ modal.style.display = "none";
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-if (event.target == modal) {
-modal.style.display = "none";
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
 }
+
+function updateStats() {
+    ul = document.getElementById('book-stats')
+    let bookCount = 0;
+    let readCount = 0;
+    let notReadCount = 0;
+
+    for(let i =0; i<library.length; i++) {
+        book = library[i];
+        if (book === null) {
+        } 
+        else {
+            bookCount += 1; 
+            if (book.read == 'Yes')
+                readCount += 1;
+            else {
+                notReadCount += 1;
+            }
+        }
+
+    }
+
+    ul.innerHTML = `
+        <li>Books: ${bookCount}</li>
+        <li>Read: ${readCount}</li>
+        <li>To-read: ${notReadCount}</li>`;
 }
 
 theHobbit = new Book('The Hobbit', 'JRR Tolkien', '300', '1935', 'Yes');
@@ -98,6 +154,7 @@ addBookToLibrary(nineteenEightyFour);
 addBookToDOM(nineteenEightyFour, library.length);
 addBookToLibrary(theRoad);
 addBookToDOM(theRoad, library.length);
+updateStats();
 
 const saveButton = document.querySelector('.save-button');
 saveButton.addEventListener('click', 
@@ -110,6 +167,7 @@ saveButton.addEventListener('click',
 
     addBookToLibrary(newBook);
     addBookToDOM(newBook, library.length);
+    updateStats();
 
     modal.style.display = "none";
 }
