@@ -67,6 +67,8 @@ function addBookToDOM(book, key) {
     button.classList.add('trash-button');
     button.addEventListener('click', () => removeBook(key));
     div.appendChild(button);
+    
+    checkForEmpty();
 }
 
 function changeBookStatus(key) {
@@ -107,7 +109,7 @@ function checkForEmpty() {
         emptyMessage.style.display = "block";
     } else {
         emptyMessage = document.getElementsByTagName('h4')[0];
-        emptyMessage.style.display = "nonegi";
+        emptyMessage.style.display = "none";
     }
 }
 
