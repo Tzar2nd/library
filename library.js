@@ -18,7 +18,8 @@ function addBookToLibrary(book) {
 }
 
 // Add book elements to DOM via data-key
-function addBookToDOM(book, key) {
+function addBookToDOM(book) {
+    key = library.length -1;
     let element = document.getElementById("card-content");
     let table = document.createElement('table');
     let tbody = document.createElement('tbody');
@@ -40,7 +41,7 @@ function addBookToDOM(book, key) {
 
     // Loop through the array and enter data into the table
     Object.keys(book).forEach((key) => {
-        if (key != 'imageSrc') {
+        if (key != 'imageSrc' && key != 'read') {
             td = document.createElement('td');
             td.textContent = book[key];
             tr.appendChild(td);
@@ -57,7 +58,7 @@ function addBookToDOM(book, key) {
         button.textContent = 'Not Read';
         button.classList.add('not-read-button');
     }
-    button.addEventListener('click', () => changeBookStatus(key));
+    button.addEventListener('click', changeBookStatus);
     div.appendChild(button);
 
     // Delete button
@@ -65,13 +66,15 @@ function addBookToDOM(book, key) {
     button.innerHTML = `&times;`;
     button.setAttribute("data-key", key);
     button.classList.add('trash-button');
-    button.addEventListener('click', () => removeBook(key));
+    console.log(key);
+    button.addEventListener('click', removeBook);
     div.appendChild(button);
-    
+
     checkForEmpty();
 }
 
-function changeBookStatus(key) {
+function changeBookStatus(e) {
+    key = e.target.parentNode.getAttribute('data-key');
     book = library[key];
     console.log(key);
     const div = document.querySelector(`div[data-key="${key}"]`);
@@ -93,11 +96,10 @@ function changeBookStatus(key) {
 }
 
 // remove book from DOM via data-key
-function removeBook(key) {
-    library[key] = null;
-    console.log(library);
+function removeBook(e) {
+    key = e.target.parentNode.getAttribute('data-key');
+    library[key] = null;        
     const div = document.querySelector(`div[data-key="${key}"]`);
-    div.textContent = '';
     div.parentNode.removeChild(div);
     checkForEmpty();
     updateStats();
@@ -166,16 +168,15 @@ theHobbit = new Book('The Hobbit', 'JRR Tolkien', '300', '1935', 'Yes');
 nineteenEightyFour = new Book('1984', 'George Orwell', '280', '1945', 'Yes');
 theRoad = new Book('The Road', 'Cormac McCarthy', '500', '1984', 'No');
 addBookToLibrary(theHobbit);
-addBookToDOM(theHobbit, library.length -1);
+addBookToDOM(theHobbit);
 addBookToLibrary(nineteenEightyFour);
-addBookToDOM(nineteenEightyFour, library.length -1);
+addBookToDOM(nineteenEightyFour);
 addBookToLibrary(theRoad);
-addBookToDOM(theRoad, library.length-1);
+addBookToDOM(theRoad);
 updateStats();
 
 const saveButton = document.querySelector('.save-button');
-saveButton.addEventListener('click', 
-    () => { 
+saveButton.addEventListener('click', () => { 
     title = document.getElementById('title').value;
     author = document.getElementById('author').value;
     pages = document.getElementById('pages').value;
@@ -183,7 +184,7 @@ saveButton.addEventListener('click',
     newBook = new Book(title, author, pages, year, 'No');
 
     addBookToLibrary(newBook);
-    addBookToDOM(newBook, library.length -1);
+    addBookToDOM(newBook);
     updateStats();
 
     modal.style.display = "none";

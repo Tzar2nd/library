@@ -31,11 +31,16 @@
             margin: auto;
             padding: 0.5rem;
             border: 1px solid black;
+            cursor: pointer;
+        }
+
+        #newBook:hover {
+            background-color: #DEDEDE;
         }
 
         .stats {
             margin-left: auto;
-            margin-right: 20%;
+            margin-right: 30%;
             height: auto;
         }
 
@@ -50,7 +55,7 @@
         .card-container {
             display: inline-flex;
             margin: 0 auto 1rem auto; 
-            width: 80%;
+            width: 70%;
             min-width: 0;
             min-height: 0;
             overflow: auto;   
@@ -75,36 +80,46 @@
         }
 
         table {
-            width: 100%;
         }
 
         table > tbody > tr > td {
             padding: .8rem;
-            width: auto;
+            width: 110px;
+            text-align: justify;
         }
 
         .save-button {
             display: block;
             border: 1px solid black;
-            margin: auto;
+            margin: 1rem auto 0 auto;
             width: 60px;
             height: 40px;
             text-align: center;
+            cursor: pointer;
         }
         .status-button {
         }
+
         .read-button {
             outline: 1px solid black;
             padding: 0.5rem;
-            margin: 2rem 1rem;
+            margin: 2rem 1rem 2rem auto;
             cursor: pointer; 
+        }
+
+        .hidden-button {
+            visibility: hidden;
+            outline: 1px solid black;
+            padding: 0.5rem;
+            margin: 0rem 1rem 0rem auto;
+
         }
 
         .not-read-button {
             outline: 1px solid gray;
             color: gray;
             font: 1rem;
-            margin: 2rem 1rem;
+            margin: 2rem 1rem 2rem auto;
             cursor: pointer; 
         }
 
@@ -171,6 +186,16 @@
             display: none;
             text-align: center;
         }
+
+        #div-header-table {
+            display: flex;
+            width: 70%;
+        }
+
+        .table-header {
+            font-weight: bold;
+            color: gray;
+        }
     </style>
 </head>
 <body>
@@ -200,6 +225,21 @@
                 <ul id ='book-stats'>
                 </ul>
             </div>
+        </div>
+        <div id='div-header-table'>
+            <table class='table-header'>
+                <tbody>
+                    <tr>
+                        <td>Cover</td>
+                        <td>Title</td>
+                        <td>Author</td>
+                        <td>Pages</td>
+                        <td>Release date</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class='hidden-button'>Read</button>
+            <button class='hidden-button'>&times;</button>
         </div>
         <div id='card-content'>
             <h4>There are no books to display</h4>
